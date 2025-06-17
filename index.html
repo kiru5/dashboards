@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Office Dashboard</title>
+  <style>body{font-family:sans-serif;padding:2rem} h2{margin-top:2rem}</style>
+</head>
+<body>
+  <h1>Office Dashboard</h1>
+  <div id="dashboard"></div>
+
+  <script>
+    const sheetID = 'YOUR_GOOGLE_SHEET_ID';
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/Variable?key=YOUR_API_KEY`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        const rows = data.values.slice(1);
+        const group = {};
+        rows.forEach(([cat, item, val]) => {
+          if (!group[cat]) group[cat] = [];
+          group[cat].push(`<li><strong>${item}:</strong> ${val}</li>`);
+        });
+
+        let html = '';
+        for (let cat in group) {
+          html += `<h2>${cat}</h2><ul>${group[cat].join('')}</ul>`;
+        }
+        document.getElementById("dashboard").innerHTML = html;
+      });
+  </script>
+</body>
+</html>
