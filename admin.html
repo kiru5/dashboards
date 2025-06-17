@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <style>body{font-family:sans-serif;padding:2rem} label{display:block;margin-top:1rem}</style>
+</head>
+<body>
+  <h1>Update Dashboard Data</h1>
+  <input type="password" id="pass" placeholder="Enter password" />
+  <button onclick="unlock()">Login</button>
+
+  <form id="adminForm" style="display:none" onsubmit="submitData(); return false;">
+    <label>KKL: <input type="text" name="Manpower::KKL"></label>
+    <label>PPCL: <input type="text" name="Manpower::PPCL"></label>
+    <label>DA Rate: <input type="text" name="DA Rate::01.04.25-30.06.25"></label>
+    <button type="submit">Update</button>
+  </form>
+
+  <script>
+    const PASSWORD = "gail123";  // Change this password
+    const ENDPOINT = "PASTE_YOUR_WEBHOOK_URL_HERE";
+
+    function unlock() {
+      if (document.getElementById("pass").value === PASSWORD) {
+        document.getElementById("adminForm").style.display = "block";
+      } else {
+        alert("Wrong password!");
+      }
+    }
+
+    function submitData() {
+      const form = document.getElementById("adminForm");
+      const inputs = form.querySelectorAll("input");
+      const data = {};
+      inputs.forEach(i => data[i.name] = i.value);
+
+      fetch(ENDPOINT, {
+        method: "POST",
+        body: JSON.stringify(data)
+      }).then(res => res.text()).then(msg => {
+        alert("Update Successful!");
+      });
+    }
+  </script>
+</body>
+</html>
